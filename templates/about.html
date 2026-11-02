@@ -1,0 +1,256 @@
+{% extends "base.html" %}
+
+{% block title %}Academic Project Dossier &amp; Architecture{% endblock %}
+
+{% block content %}
+<div class="container px-lg-5 py-4">
+    <!-- About Header -->
+    <div class="text-center mb-5">
+        <span class="badge bg-primary bg-opacity-25 text-info border border-info mb-2">
+            <i class="bi bi-mortarboard-fill me-1"></i> B.Tech Artificial Intelligence &amp; Data Science Submission
+        </span>
+        <h2 class="text-light fw-bold">PhishGuard AI: System Architecture &amp; Methodology</h2>
+        <p class="text-muted mx-auto" style="max-width: 720px;">
+            Comprehensive academic project documentation, mathematical methodologies, algorithm comparisons, and architecture specifications for faculty evaluation and viva examination.
+        </p>
+    </div>
+
+    <!-- Academic Metadata Badge -->
+    <div class="cyber-card p-3 mb-5">
+        <div class="row g-3 text-center small">
+            <div class="col-sm-3 border-end-sm border-secondary border-opacity-25">
+                <span class="text-muted d-block">Project Name</span>
+                <strong class="text-light">PhishGuard AI</strong>
+            </div>
+            <div class="col-sm-3 border-end-sm border-secondary border-opacity-25">
+                <span class="text-muted d-block">Academic Program</span>
+                <strong class="text-info">B.Tech AI &amp; Data Science</strong>
+            </div>
+            <div class="col-sm-3 border-end-sm border-secondary border-opacity-25">
+                <span class="text-muted d-block">Primary Focus</span>
+                <strong class="text-success">Cybersecurity Threat Triage</strong>
+            </div>
+            <div class="col-sm-3">
+                <span class="text-muted d-block">Core Methodology</span>
+                <strong class="text-cyber-accent">Character n-Grams + Ensembles</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- 1. Abstract & Problem Statement -->
+    <div class="row g-4 mb-5">
+        <div class="col-lg-6">
+            <div class="cyber-card p-4 h-100">
+                <h4 class="text-light fw-bold mb-3"><i class="bi bi-file-text text-cyber-accent me-2"></i>Project Abstract</h4>
+                <p class="text-secondary small leading-relaxed mb-3">
+                    Phishing remains the predominant attack vector in cybercrime, accounting for catastrophic financial losses and credential compromises globally. Traditional detection systems depend heavily on static blacklists (such as Google Safe Browsing or PhishTank), which suffer from significant temporal latency—failing to defend against newly minted zero-hour phishing domains that survive for less than 4 hours.
+                </p>
+                <p class="text-secondary small leading-relaxed mb-0">
+                    <strong>PhishGuard AI</strong> introduces a defensive, non-intrusive machine learning framework that evaluates website URLs strictly at the lexical, structural, and syntactic level. By combining 16 engineered quantitative features with character-level TF-IDF n-grams (3 to 5 grams), the system performs local classification into Safe, Suspicious, or High Risk, generates calibrated 0-100 threat scores, delivers explainable heuristic rationales, and compiles publication-quality PDF audit reports.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="cyber-card p-4 h-100">
+                <h4 class="text-light fw-bold mb-3"><i class="bi bi-exclamation-octagon text-danger me-2"></i>Problem Statement</h4>
+                <p class="text-secondary small leading-relaxed mb-3">
+                    Existing web-based phishing detection utilities present two severe operational handicaps:
+                </p>
+                <ul class="text-secondary small mb-3">
+                    <li class="mb-2"><strong>Active Socket Infiltration Risk:</strong> Many commercial crawlers actually visit or fetch DOM elements from submitted URLs. This dangerous practice can execute client-side drive-by malware payloads, alert attackers via DNS telemetry, and violate organizational data sovereignty.</li>
+                    <li><strong>Blacklist Latency Gap:</strong> Static domain reputation feeds require human or crawler verification, leaving a multi-hour window during which victims interact with newly registered malicious links before blacklisting occurs.</li>
+                </ul>
+                <p class="text-secondary small leading-relaxed mb-0">
+                    There is an urgent requirement for a high-accuracy, <em>offline-safe</em> machine learning platform capable of instantaneous pre-execution URL triage without initiating socket requests to user-submitted web addresses.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Existing System vs Proposed System -->
+    <div class="cyber-card p-4 mb-5">
+        <h4 class="text-light fw-bold mb-3"><i class="bi bi-arrow-left-right text-cyber-accent me-2"></i>Comparative Analysis: Existing vs. Proposed System</h4>
+        <div class="table-responsive">
+            <table class="table-cyber small">
+                <thead>
+                    <tr>
+                        <th style="width: 20%;">Dimension</th>
+                        <th style="width: 40%;" class="text-danger">Existing / Conventional Systems</th>
+                        <th style="width: 40%;" class="text-success">PhishGuard AI (Proposed System)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="fw-bold">Zero-Hour URL Detection</td>
+                        <td class="text-muted">Fails completely on newly registered links missing from centralized blacklists.</td>
+                        <td class="text-light">Predicts malicious intent instantly via sub-token character patterns and lexical features.</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Network Socket Safety</td>
+                        <td class="text-muted">Often initiates HTTP requests or renders web pages, risking zero-day drive-by infections.</td>
+                        <td class="text-light">100% Non-intrusive. Never opens, pings, or contacts target destinations over network sockets.</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Feature Engineering</td>
+                        <td class="text-muted">Relies on rudimentary keywords or slow third-party WHOIS API lookups.</td>
+                        <td class="text-light">Hybrid: 16 quantitative structural metrics + 800 character n-gram TF-IDF dimensions.</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Explainability &amp; Triage</td>
+                        <td class="text-muted">Binary black-box verdict (Blocked/Allowed) without justification.</td>
+                        <td class="text-light">Multi-tier classification, 0-100 risk score, itemized heuristic weights, and defensive guidance.</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Audit &amp; Reporting</td>
+                        <td class="text-muted">No persistent local history or downloadable institutional documentation.</td>
+                        <td class="text-light">Persistent SQLite audit trail, live Chart.js dashboard, CSV export, and PDF generation.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 3. System Architecture Workflow -->
+    <div class="cyber-card p-4 p-md-5 mb-5">
+        <h4 class="text-light fw-bold mb-4"><i class="bi bi-diagram-3-fill text-cyber-accent me-2"></i>High-Level System Architecture</h4>
+        
+        <div class="row g-3 text-center mb-4">
+            <div class="col-md-3">
+                <div class="p-3 rounded border border-secondary border-opacity-50" style="background: rgba(15, 23, 42, 0.7);">
+                    <div class="text-cyber-accent fw-bold small mb-1">LAYER 1: PRESENTATION</div>
+                    <div class="fw-bold text-light">Bootstrap 5 + Chart.js UI</div>
+                    <p class="text-muted small mt-2 mb-0">Responsive HTML5, dark/light theme, interactive SVG risk gauges, and asynchronous REST fetch.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-3 rounded border border-secondary border-opacity-50" style="background: rgba(15, 23, 42, 0.7);">
+                    <div class="text-info fw-bold small mb-1">LAYER 2: APPLICATION</div>
+                    <div class="fw-bold text-light">Flask RESTful Server</div>
+                    <p class="text-muted small mt-2 mb-0">Modular Blueprint routes: Scanner, Dashboard, and ReportLab PDF compilation.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-3 rounded border border-secondary border-opacity-50" style="background: rgba(15, 23, 42, 0.7);">
+                    <div class="text-success fw-bold small mb-1">LAYER 3: ML PIPELINE</div>
+                    <div class="fw-bold text-light">Scikit-Learn Ensemble</div>
+                    <p class="text-muted small mt-2 mb-0">StandardScaler + TfidfVectorizer (char n-grams) stacked into Random Forest classifier.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-3 rounded border border-secondary border-opacity-50" style="background: rgba(15, 23, 42, 0.7);">
+                    <div class="text-warning fw-bold small mb-1">LAYER 4: PERSISTENCE</div>
+                    <div class="fw-bold text-light">SQLite Database Engine</div>
+                    <p class="text-muted small mt-2 mb-0">Indexed audit tables storing scan UUIDs, timestamped risk vectors, and JSON finding payloads.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-3 rounded border border-secondary border-opacity-25 bg-dark bg-opacity-40 small text-secondary">
+            <i class="bi bi-shield-shaded text-cyber-accent me-1"></i>
+            <strong>Data Ingestion Pipeline:</strong>
+            <code>Raw URL &rarr; Normalization (urllib.parse) &rarr; Feature Extraction (16 Quantitative Dimensions) + TF-IDF (800 Character 3-to-5 grams) &rarr; Sparse Feature Stacking (scipy.sparse.hstack) &rarr; Calibrated Random Forest Probability &rarr; Heuristic Blending &rarr; SQLite Logging &rarr; JSON / PDF Response</code>
+        </div>
+    </div>
+
+    <!-- 4. Mathematical Methodology & Algorithms -->
+    <div class="row g-4 mb-5">
+        <div class="col-lg-6">
+            <div class="cyber-card p-4 h-100">
+                <h5 class="text-light fw-bold mb-3"><i class="bi bi-calculator text-cyber-accent me-2"></i>Mathematical Formulation</h5>
+                
+                <h6 class="text-info fw-bold mt-3 mb-1">1. Character-Level TF-IDF</h6>
+                <p class="text-muted small mb-2">
+                    Term Frequency-Inverse Document Frequency calculates the informational significance of character n-gram tokens $t$ within URL string $d$:
+                </p>
+                <div class="p-2 rounded bg-dark border border-secondary small text-center mb-3">
+                    <code>TF-IDF(t, d, D) = TF(t, d) &times; ln((1 + |D|) / (1 + DF(t))) + 1</code>
+                </div>
+
+                <h6 class="text-info fw-bold mt-3 mb-1">2. Logistic Regression Sigmoid Probability</h6>
+                <div class="p-2 rounded bg-dark border border-secondary small text-center mb-3">
+                    <code>P(y = 1 | x) = 1 / (1 + e^-(w^T x + b))</code>
+                </div>
+
+                <h6 class="text-info fw-bold mt-3 mb-1">3. Random Forest Gini Impurity</h6>
+                <div class="p-2 rounded bg-dark border border-secondary small text-center mb-0">
+                    <code>I_G(p) = 1 - &sum; (p_i)^2</code>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="cyber-card p-4 h-100">
+                <h5 class="text-light fw-bold mb-3"><i class="bi bi-stack text-cyber-accent me-2"></i>Software &amp; Technology Stack</h5>
+                <div class="table-responsive">
+                    <table class="table-cyber small">
+                        <thead>
+                            <tr>
+                                <th>Component</th>
+                                <th>Technology</th>
+                                <th>Role</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="fw-bold">Backend Framework</td>
+                                <td class="text-info">Python 3.13 + Flask</td>
+                                <td>REST API routing, template rendering, and error handling.</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">Machine Learning</td>
+                                <td class="text-info">Scikit-learn + Scipy</td>
+                                <td>TF-IDF vectorizer, Random Forest, Logistic Regression.</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">Data Processing</td>
+                                <td class="text-info">Pandas + NumPy</td>
+                                <td>Dataset deduplication, feature matrix handling.</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">Audit Database</td>
+                                <td class="text-info">SQLite3</td>
+                                <td>Zero-configuration persistent transactional logging.</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">PDF Generator</td>
+                                <td class="text-info">ReportLab 5.1</td>
+                                <td>Publication-grade vector PDF audit synthesis.</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">User Interface</td>
+                                <td class="text-info">Bootstrap 5.3 + Chart.js</td>
+                                <td>Responsive cybersecurity SaaS interface & telemetry charts.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. Limitations & Future Scope -->
+    <div class="cyber-card p-4 mb-4">
+        <h4 class="text-light fw-bold mb-3"><i class="bi bi-compass text-cyber-accent me-2"></i>Project Limitations &amp; Future Scope</h4>
+        <div class="row g-4">
+            <div class="col-md-6">
+                <h6 class="text-warning fw-bold"><i class="bi bi-exclamation-triangle me-1"></i>Current Limitations</h6>
+                <ul class="text-secondary small mb-0 d-flex flex-column gap-2">
+                    <li><strong>No Live Dynamic Redirection Tracking:</strong> Because PhishGuard AI never contacts destination servers, complex server-side HTTP 302 Cloaking and geofenced redirects cannot be tracked.</li>
+                    <li><strong>Zero Domain Ownership Verification:</strong> The platform does not query active WHOIS databases or TLS certificate authorities to avoid outbound telemetry footprints.</li>
+                    <li><strong>Evasion via URL Shortener Chaining:</strong> Multiple chained URL shorteners require recursive resolution which requires network connectivity.</li>
+                </ul>
+            </div>
+
+            <div class="col-md-6">
+                <h6 class="text-success fw-bold"><i class="bi bi-stars me-1"></i>Future Enhancements</h6>
+                <ul class="text-secondary small mb-0 d-flex flex-column gap-2">
+                    <li><strong>Browser Extension Integration:</strong> Compile a lightweight WebExtension (Chrome/Firefox) integrating PhishGuard AI's feature pipeline to warn users in real time.</li>
+                    <li><strong>Deep Learning Sequential Models:</strong> Train Character-level Bi-directional LSTM or Transformer (BERT-style) sequence encoders on URL strings.</li>
+                    <li><strong>Passive DNS &amp; Certificate Transparency Logs:</strong> Ingest offline TLS certificate transparency feeds for zero-day domain entropy scoring without visiting hosts.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

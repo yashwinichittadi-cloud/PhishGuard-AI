@@ -1,0 +1,243 @@
+{% extends "base.html" %}
+
+{% block title %}PhishGuard AI - Intelligent Phishing Detection & Analysis Platform{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="py-5 py-lg-6 position-relative overflow-hidden">
+    <div class="container px-lg-5">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-7">
+                <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-3 border border-secondary" style="background: rgba(56, 189, 248, 0.08);">
+                    <i class="bi bi-shield-check text-cyber-accent"></i>
+                    <span class="small fw-semibold text-cyber-accent">Undergraduate AI & Data Science Academic Project</span>
+                </div>
+                
+                <h1 class="display-4 fw-black text-light tracking-tight mb-3">
+                    Intelligent Phishing Detection &amp; <span class="text-cyber-accent">Cybersecurity Analysis</span>
+                </h1>
+                
+                <p class="lead text-secondary mb-4">
+                    PhishGuard AI analyzes website URLs using hybrid character-level TF-IDF n-grams and lexical feature engineering to identify credential-harvesting threats without initiating network requests.
+                </p>
+
+                <!-- Quick Hero URL Input Widget -->
+                <div class="cyber-card p-3 mb-4">
+                    <form action="{{ url_for('scanner.scanner_page') }}" method="GET" class="d-flex flex-column flex-sm-row gap-2">
+                        <div class="cyber-input-group flex-grow-1">
+                            <i class="bi bi-globe2 text-cyber-accent ms-2 fs-5"></i>
+                            <input type="text" name="url" placeholder="Enter suspicious website URL to inspect (e.g. http://paypal-verify-auth.xyz)..." required autocomplete="off">
+                        </div>
+                        <button type="submit" class="btn btn-cyber-primary text-nowrap px-4">
+                            <i class="bi bi-shield-shaded"></i> Analyze URL
+                        </button>
+                    </form>
+                    
+                    <div class="d-flex flex-wrap align-items-center gap-2 mt-3 pt-2 border-top border-secondary border-opacity-25">
+                        <span class="small text-muted fw-semibold"><i class="bi bi-lightning-charge me-1"></i>Try Academic Benchmark Samples:</span>
+                        <a href="{{ url_for('scanner.scanner_page', url='https://www.google.com') }}" class="sample-pill">
+                            <i class="bi bi-check-circle-fill text-success"></i> google.com
+                        </a>
+                        <a href="{{ url_for('scanner.scanner_page', url='http://paypal-verification-center-update.com/signin/auth.php') }}" class="sample-pill">
+                            <i class="bi bi-exclamation-triangle-fill text-danger"></i> Brand Spoofing
+                        </a>
+                        <a href="{{ url_for('scanner.scanner_page', url='http://192.168.1.100/secure-login/bankofamerica.html') }}" class="sample-pill">
+                            <i class="bi bi-hdd-network-fill text-danger"></i> Bare IP Host
+                        </a>
+                        <a href="{{ url_for('scanner.scanner_page', url='http://bit.ly/3x8Qz99-urgent-account-update') }}" class="sample-pill">
+                            <i class="bi bi-scissors text-warning"></i> URL Shortener
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Live Audit Telemetry Preview -->
+                <div class="row g-3">
+                    <div class="col-sm-4">
+                        <div class="cyber-card p-3 text-center">
+                            <div class="text-cyber-accent fw-bold fs-4">{{ stats.total_scans }}</div>
+                            <div class="small text-muted">Audited Records</div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="cyber-card p-3 text-center">
+                            <div class="text-success fw-bold fs-4">{{ stats.safe_scans }}</div>
+                            <div class="small text-muted">Benign URLs</div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="cyber-card p-3 text-center">
+                            <div class="text-danger fw-bold fs-4">{{ stats.high_risk_scans }}</div>
+                            <div class="small text-muted">Phishing Identified</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5 text-center">
+                <!-- Visual Cybersecurity Threat Radar Illustration -->
+                <div class="cyber-card p-4 position-relative">
+                    <div class="position-absolute top-0 end-0 m-3">
+                        <span class="badge bg-success bg-opacity-25 text-success border border-success"><i class="bi bi-record-circle me-1"></i>ML Engine Active</span>
+                    </div>
+                    <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="PhishGuard Shield" style="width: 140px; height: 140px; filter: drop-shadow(0 0 35px rgba(56, 189, 248, 0.4));" class="my-3">
+                    
+                    <h4 class="text-light fw-bold mb-2">Zero-Trust Local URL Engine</h4>
+                    <p class="text-muted small mb-4">
+                        Trained on verified open-source threat intelligence data. Evaluates 16 numerical features alongside 800 character n-gram dimensions.
+                    </p>
+
+                    <div class="list-group list-group-flush text-start small">
+                        <div class="list-group-item bg-transparent text-secondary border-secondary border-opacity-25 d-flex justify-content-between">
+                            <span><i class="bi bi-cpu text-cyber-accent me-2"></i>Active Champion Model</span>
+                            <strong class="text-light">Random Forest Classifier</strong>
+                        </div>
+                        <div class="list-group-item bg-transparent text-secondary border-secondary border-opacity-25 d-flex justify-content-between">
+                            <span><i class="bi bi-shield-lock text-cyber-accent me-2"></i>Network Security</span>
+                            <span class="text-success fw-semibold">Pure Local Analysis</span>
+                        </div>
+                        <div class="list-group-item bg-transparent text-secondary border-secondary border-opacity-25 d-flex justify-content-between">
+                            <span><i class="bi bi-speedometer text-cyber-accent me-2"></i>Risk Calibration</span>
+                            <span class="text-info fw-semibold">0 - 100 Dynamic Scale</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <a href="{{ url_for('dashboard.dashboard_page') }}" class="btn btn-cyber-secondary w-100">
+                            <i class="bi bi-bar-chart-line me-1"></i> Open Threat Intelligence Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-5 border-top border-secondary border-opacity-25" style="background: rgba(15, 23, 42, 0.3);">
+    <div class="container px-lg-5">
+        <div class="text-center mb-5">
+            <span class="text-cyber-accent fw-bold text-uppercase small tracking-wider">Operational Pipeline</span>
+            <h2 class="text-light fw-bold mt-1">How PhishGuard AI Analyzes Threats</h2>
+            <p class="text-muted mx-auto" style="max-width: 650px;">
+                A multi-stage defensive pipeline extracting lexical, structural, and syntactic markers from user-submitted URL strings without requesting external servers.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="cyber-card p-4 h-100 text-center">
+                    <div class="stat-icon blue mx-auto mb-3">
+                        <i class="bi bi-input-cursor-text"></i>
+                    </div>
+                    <h5 class="text-light fw-bold">1. URL Normalization</h5>
+                    <p class="text-muted small mb-0">
+                        Sanitizes input strings, standardizes URI schemes, and decomposes URLs into protocol, host, registered domain, path, and parameters.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="cyber-card p-4 h-100 text-center">
+                    <div class="stat-icon green mx-auto mb-3">
+                        <i class="bi bi-diagram-3"></i>
+                    </div>
+                    <h5 class="text-light fw-bold">2. Lexical Extraction</h5>
+                    <p class="text-muted small mb-0">
+                        Computes 16 numerical features including dot frequency, hyphenation, subdomain count, IP hosts, brand spoofing, and risky TLDs.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="cyber-card p-4 h-100 text-center">
+                    <div class="stat-icon amber mx-auto mb-3">
+                        <i class="bi bi-braces-asterisk"></i>
+                    </div>
+                    <h5 class="text-light fw-bold">3. TF-IDF Character n-Grams</h5>
+                    <p class="text-muted small mb-0">
+                        Generates sub-token character n-grams (3 to 5 characters) to expose obfuscated keywords, typosquatting, and deceptive patterns.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="cyber-card p-4 h-100 text-center">
+                    <div class="stat-icon red mx-auto mb-3">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+                    <h5 class="text-light fw-bold">4. Risk &amp; Explainability</h5>
+                    <p class="text-muted small mb-0">
+                        Classifies URLs into Safe, Suspicious, or High Risk, generates 0-100 risk score, surfaces threat findings, and generates PDF audits.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Core Features Section -->
+<section class="py-5">
+    <div class="container px-lg-5">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <span class="text-cyber-accent fw-bold text-uppercase small tracking-wider">Enterprise Security Architecture</span>
+                <h2 class="text-light fw-bold mt-1 mb-4">Academic Engineering Meets Threat Intelligence</h2>
+                
+                <div class="d-flex gap-3 mb-4">
+                    <div class="stat-icon blue flex-shrink-0" style="width: 44px; height: 44px; font-size: 1.2rem;">
+                        <i class="bi bi-cpu"></i>
+                    </div>
+                    <div>
+                        <h5 class="text-light fw-bold mb-1">Dual Algorithm Machine Learning</h5>
+                        <p class="text-muted small mb-0">
+                            Trains and evaluates both Logistic Regression and Random Forest ensembles with Stratified 80/20 train/test splitting and calibrated probabilities.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-3 mb-4">
+                    <div class="stat-icon green flex-shrink-0" style="width: 44px; height: 44px; font-size: 1.2rem;">
+                        <i class="bi bi-file-earmark-pdf"></i>
+                    </div>
+                    <div>
+                        <h5 class="text-light fw-bold mb-1">Downloadable PDF Security Audits</h5>
+                        <p class="text-muted small mb-0">
+                            Generates professional PDF audit reports formatted with ReportLab containing full threat telemetry, finding breakdown, and defense steps.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-3">
+                    <div class="stat-icon amber flex-shrink-0" style="width: 44px; height: 44px; font-size: 1.2rem;">
+                        <i class="bi bi-database"></i>
+                    </div>
+                    <div>
+                        <h5 class="text-light fw-bold mb-1">Persistent SQLite Audit Trail &amp; CSV Export</h5>
+                        <p class="text-muted small mb-0">
+                            Tracks every scan with unique UUIDs, risk scores, and feature vectors. Search, filter by threat level, and export data directly to CSV.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="cyber-card p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="text-light fw-bold mb-0"><i class="bi bi-terminal me-2 text-cyber-accent"></i>Local Inspection Safeguards</h5>
+                        <span class="badge bg-danger bg-opacity-25 text-danger border border-danger">Defensive Rule</span>
+                    </div>
+                    <div class="alert alert-dark border-secondary bg-black bg-opacity-40 text-secondary small mb-3">
+                        <code>SECURITY_DIRECTIVE: Target URLs must NEVER be opened, pinged, or requested over network sockets.</code>
+                    </div>
+                    <p class="text-muted small mb-3">
+                        Many automated security projects dangerously ping or crawl malicious URLs, inadvertently triggering malware payloads, DNS telemetry pings to threat actors, or IP exposure.
+                    </p>
+                    <p class="text-muted small mb-0">
+                        PhishGuard AI executes strictly in-memory lexical and syntactic token parsing, ensuring that visiting administrators and student evaluators are never exposed to live zero-day exploits.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

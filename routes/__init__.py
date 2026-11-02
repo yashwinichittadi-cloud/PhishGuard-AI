@@ -1,0 +1,3 @@
+"""
+PhishGuard AI - Application Blueprints
+"""

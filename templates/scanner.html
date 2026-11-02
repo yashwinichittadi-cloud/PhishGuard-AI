@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+
+{% block title %}AI URL Threat Scanner{% endblock %}
+
+{% block content %}
+<div class="container px-lg-5 py-4">
+    <!-- Scanner Header -->
+    <div class="text-center mb-4">
+        <span class="badge bg-primary bg-opacity-25 text-info border border-info mb-2">
+            <i class="bi bi-shield-lock me-1"></i> Non-Intrusive Offline URL Analysis
+        </span>
+        <h2 class="text-light fw-bold">AI-Powered Phishing Threat Scanner</h2>
+        <p class="text-muted mx-auto" style="max-width: 680px;">
+            Inspect any website address for deceptive subdomains, typosquatting, credential spoofing, and evasion markers using trained machine learning models.
+        </p>
+    </div>
+
+    <!-- Scanner Input Box -->
+    <div class="cyber-card p-4 mx-auto mb-4" style="max-width: 860px;">
+        <form id="scanForm" class="d-flex flex-column flex-sm-row gap-2">
+            <div class="cyber-input-group flex-grow-1">
+                <i class="bi bi-search text-cyber-accent ms-2 fs-5"></i>
+                <input type="text" id="urlInput" name="url" value="{{ prefill_url }}" placeholder="Enter full URL to scan (e.g., http://paypal-verify-account.xyz/login.php)..." required autocomplete="off">
+            </div>
+            <button type="submit" id="scanBtn" class="btn btn-cyber-primary text-nowrap px-4">
+                <span id="scanSpinner" class="spinner-border spinner-border-sm me-2 d-none"></span>
+                <span id="scanBtnText"><i class="bi bi-shield-shaded"></i> Scan Threat</span>
+            </button>
+        </form>
+
+        <!-- Benchmark Sample Pills -->
+        <div class="d-flex flex-wrap align-items-center gap-2 mt-3 pt-3 border-top border-secondary border-opacity-25">
+            <span class="small text-muted fw-semibold"><i class="bi bi-magic me-1"></i>Try Benchmark Test URLs:</span>
+            <button type="button" class="sample-pill sample-url-pill" data-url="https://www.google.com">
+                <i class="bi bi-check-circle text-success"></i> Benign: google.com
+            </button>
+            <button type="button" class="sample-pill sample-url-pill" data-url="https://github.com/torvalds/linux">
+                <i class="bi bi-check-circle text-success"></i> Benign: github.com
+            </button>
+            <button type="button" class="sample-pill sample-url-pill" data-url="http://paypal-verification-center-update.com/signin/auth.php">
+                <i class="bi bi-exclamation-triangle text-danger"></i> Phish: PayPal Spoof
+            </button>
+            <button type="button" class="sample-pill sample-url-pill" data-url="http://192.168.1.100/secure-login/bankofamerica.html">
+                <i class="bi bi-hdd-network text-danger"></i> Phish: Bare IP Host
+            </button>
+            <button type="button" class="sample-pill sample-url-pill" data-url="http://bit.ly/3x8Qz99-urgent-account-update">
+                <i class="bi bi-scissors text-warning"></i> Suspicious: Shortener
+            </button>
+        </div>
+    </div>
+
+    <!-- Empty State (Shown before scan) -->
+    <div id="scannerEmptyState" class="cyber-card p-5 text-center mx-auto {% if prefill_url %}d-none{% endif %}" style="max-width: 860px;">
+        <i class="bi bi-radar text-cyber-accent" style="font-size: 3.5rem; opacity: 0.8;"></i>
+        <h4 class="text-light fw-bold mt-3">Ready to Analyze URL Threat Profile</h4>
+        <p class="text-muted small mx-auto" style="max-width: 500px;">
+            Submit a URL above or select a benchmark sample to trigger real-time character n-gram TF-IDF analysis, feature extraction, and risk classification.
+        </p>
+        <div class="d-flex justify-content-center gap-3 mt-2 text-muted small">
+            <span><i class="bi bi-check2-circle text-success me-1"></i>No Socket Calls</span>
+            <span><i class="bi bi-check2-circle text-success me-1"></i>Zero IP Leakage</span>
+            <span><i class="bi bi-check2-circle text-success me-1"></i>Instant Report</span>
+        </div>
+    </div>
+
+    <!-- Scan Results Dynamic Container (Hidden until scanned) -->
+    <div id="scanResultContainer" class="mx-auto d-none" style="max-width: 1000px;">
+        <!-- Top Verdict Card -->
+        <div class="cyber-card p-4 mb-4">
+            <div class="row align-items-center g-4">
+                <!-- Gauge & Score -->
+                <div class="col-md-4 text-center border-end-md border-secondary border-opacity-25">
+                    <div class="risk-meter-wrapper">
+                        <canvas id="riskMeterCanvas" class="risk-circle-canvas" width="240" height="140"></canvas>
+                        <div class="risk-score-display">
+                            <div id="resRiskValue" class="risk-score-value">0.0</div>
+                            <div class="risk-score-caption">Threat Risk Score</div>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <span id="resClassificationBadge" class="badge-threat safe">
+                            <i id="resClassificationIcon" class="bi bi-shield-check me-1"></i>
+                            <span id="resClassification">Safe / Legitimate</span>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- URL Details & Actions -->
+                <div class="col-md-8">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div>
+                            <span class="text-muted small text-uppercase fw-bold tracking-wider">Submitted Target URL</span>
+                            <div id="resUrl" class="fw-mono text-light text-break fs-6 mt-1 p-2 rounded" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color);">
+                                https://example.com
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-2 small mb-3">
+                        <div class="col-sm-6">
+                            <span class="text-muted">Extracted Domain:</span>
+                            <strong id="resDomain" class="text-light ms-1">example.com</strong>
+                        </div>
+                        <div class="col-sm-6">
+                            <span class="text-muted">Evaluator Mode:</span>
+                            <span id="resModelMode" class="text-info ms-1">Trained ML Model</span>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex flex-wrap gap-2 pt-2 border-top border-secondary border-opacity-25">
+                        <a id="resReportBtn" href="#" class="btn btn-cyber-primary btn-sm">
+                            <i class="bi bi-file-earmark-text"></i> Full Audit Dossier
+                        </a>
+                        <a id="resPdfBtn" href="#" class="btn btn-cyber-secondary btn-sm">
+                            <i class="bi bi-file-earmark-pdf"></i> Download PDF
+                        </a>
+                        <button type="button" class="btn btn-outline-secondary btn-sm btn-copy" data-copy-target="resUrl">
+                            <i class="bi bi-clipboard"></i> Copy URL
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2 Column Feature Analysis & Findings -->
+        <div class="row g-4 mb-4">
+            <!-- Left: Heuristic Explainability Findings -->
+            <div class="col-lg-6">
+                <div class="cyber-card p-4 h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="text-light fw-bold mb-0">
+                            <i class="bi bi-lightbulb text-cyber-accent me-2"></i>Explainability Findings
+                        </h5>
+                        <span class="badge bg-dark border border-secondary text-muted small">Local Heuristics</span>
+                    </div>
+                    <p class="text-muted small mb-3">
+                        Syntactic indicators and lexical threat signals contributing to the ML classification:
+                    </p>
+                    <div id="resFindingsList">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Quantitative Features Table -->
+            <div class="col-lg-6">
+                <div class="cyber-card p-4 h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="text-light fw-bold mb-0">
+                            <i class="bi bi-cpu text-cyber-accent me-2"></i>Extracted Features
+                        </h5>
+                        <span class="badge bg-dark border border-secondary text-muted small">Vector Values</span>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table-cyber small">
+                            <tbody>
+                                <tr>
+                                    <td class="text-muted">Total URL Length</td>
+                                    <td class="text-end fw-bold text-light" id="resFeatUrlLen">-</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">Domain / Host Length</td>
+                                    <td class="text-end fw-bold text-light" id="resFeatDomainLen">-</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">Subdomain Depth Count</td>
+                                    <td class="text-end fw-bold text-light" id="resFeatSubdomains">-</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">Dot ('.') Frequency</td>
+                                    <td class="text-end fw-bold text-light" id="resFeatDots">-</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">Hyphen ('-') Frequency</td>
+                                    <td class="text-end fw-bold text-light" id="resFeatHyphens">-</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">Bare IP Address Host</td>
+                                    <td class="text-end fw-bold text-light" id="resFeatIp">-</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">HTTPS Transport Encryption</td>
+                                    <td class="text-end fw-bold text-light" id="resFeatHttps">-</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">URL Shortener Service</td>
+                                    <td class="text-end fw-bold text-light" id="resFeatShortener">-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Safety Recommendations Card -->
+        <div class="cyber-card p-4 mb-4">
+            <h5 class="text-light fw-bold mb-3">
+                <i class="bi bi-shield-exclamation text-cyber-accent me-2"></i>Recommended Cybersecurity Actions
+            </h5>
+            <ul id="resRecommendationsList" class="list-unstyled mb-0 text-secondary small">
+                <!-- Populated by JS -->
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

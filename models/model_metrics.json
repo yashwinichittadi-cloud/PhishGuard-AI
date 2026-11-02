@@ -1,0 +1,56 @@
+{
+  "timestamp": "2026-10-31T22:39:53.127464",
+  "dataset": {
+    "total_urls": 388,
+    "train_samples": 310,
+    "test_samples": 78,
+    "legitimate_count": 217,
+    "phishing_count": 171,
+    "test_distribution": {
+      "legitimate": 44,
+      "phishing": 34
+    }
+  },
+  "champion_model": "Random Forest Classifier",
+  "models_evaluated": {
+    "logistic_regression": {
+      "model_name": "Logistic Regression",
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "confusion_matrix": [
+        [
+          44,
+          0
+        ],
+        [
+          0,
+          34
+        ]
+      ]
+    },
+    "random_forest": {
+      "model_name": "Random Forest Classifier",
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "confusion_matrix": [
+        [
+          44,
+          0
+        ],
+        [
+          0,
+          34
+        ]
+      ]
+    }
+  },
+  "feature_count": {
+    "numerical": 16,
+    "tfidf_ngrams": 800,
+    "total_features": 816
+  }
+}

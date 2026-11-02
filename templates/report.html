@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+
+{% block title %}Detailed Audit Dossier #{{ scan.scan_uuid or scan.id }}{% endblock %}
+
+{% block content %}
+<div class="container px-lg-5 py-4">
+    <!-- Header with Action Buttons -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+        <div>
+            <div class="d-flex align-items-center gap-2">
+                <a href="{{ url_for('scanner.history_page') }}" class="btn btn-outline-secondary btn-sm me-1">
+                    <i class="bi bi-arrow-left"></i>
+                </a>
+                <h2 class="text-light fw-bold mb-0">Audit Dossier #{{ scan.scan_uuid or scan.id }}</h2>
+                <span class="badge bg-dark border border-secondary text-info small">{{ scan.created_at }}</span>
+            </div>
+            <p class="text-muted small mb-0">Defensive cybersecurity triage and machine learning explanation report.</p>
+        </div>
+
+        <div class="d-flex gap-2">
+            <a href="{{ url_for('reports.download_pdf', scan_id=scan.id) }}" class="btn btn-cyber-primary btn-sm d-flex align-items-center gap-1">
+                <i class="bi bi-file-earmark-pdf"></i> Download Official PDF
+            </a>
+            <button type="button" class="btn btn-cyber-secondary btn-sm d-flex align-items-center gap-1" onclick="window.print()">
+                <i class="bi bi-printer"></i> Print
+            </button>
+            <a href="{{ url_for('scanner.scanner_page') }}" class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1">
+                <i class="bi bi-plus-circle"></i> New Scan
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Classification Banner -->
+    <div class="cyber-card p-4 mb-4 border-2 {% if scan.classification_slug == 'safe' %}border-success{% elif scan.classification_slug == 'suspicious' %}border-warning{% else %}border-danger{% endif %}">
+        <div class="row align-items-center g-4">
+            <div class="col-md-3 text-center border-end-md border-secondary border-opacity-25">
+                <div class="display-3 fw-black {% if scan.classification_slug == 'safe' %}text-success{% elif scan.classification_slug == 'suspicious' %}text-warning{% else %}text-danger{% endif %}">
+                    {{ scan.risk_score }}
+                </div>
+                <div class="text-muted small fw-bold text-uppercase">Threat Risk Score (0-100)</div>
+                <div class="mt-2">
+                    <span class="badge-threat {{ scan.classification_slug }} py-1 px-3">
+                        {{ scan.classification }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="col-md-9">
+                <h5 class="text-light fw-bold mb-2">Target Subject Overview</h5>
+                <div class="p-2 rounded mb-3 fw-mono text-break" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color);">
+                    <i class="bi bi-link-45deg text-cyber-accent me-1"></i>{{ scan.submitted_url }}
+                </div>
+
+                <div class="row g-2 small text-secondary">
+                    <div class="col-sm-4">
+                        <span class="text-muted">Domain / Host:</span>
+                        <strong class="text-light ms-1">{{ scan.domain or 'N/A' }}</strong>
+                    </div>
+                    <div class="col-sm-4">
+                        <span class="text-muted">Model Applied:</span>
+                        <span class="text-info ms-1">{{ scan.model_name or 'Trained ML Classifier' }}</span>
+                    </div>
+                    <div class="col-sm-4">
+                        <span class="text-muted">Network Telemetry:</span>
+                        <span class="text-success ms-1"><i class="bi bi-check-shield"></i> Local Inspection Only</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Findings and Feature Breakdowns -->
+    <div class="row g-4 mb-4">
+        <!-- Heuristic Findings List -->
+        <div class="col-lg-6">
+            <div class="cyber-card p-4 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="text-light fw-bold mb-0">
+                        <i class="bi bi-search text-cyber-accent me-2"></i>Syntactic &amp; Heuristic Findings
+                    </h5>
+                    <span class="badge bg-dark border border-secondary text-muted small">{{ scan.findings|length }} Findings</span>
+                </div>
+
+                {% if scan.findings %}
+                    {% for f in scan.findings %}
+                    <div class="finding-box {{ f.type or 'info' }}">
+                        <div class="d-flex align-items-center mb-1">
+                            <i class="bi {{ f.icon or 'bi-info-circle' }} me-2 fs-5"></i>
+                            <strong class="text-primary">{{ f.feature }}</strong>
+                            {% if f.weight %}
+                            <span class="badge bg-secondary ms-2">+{{ f.weight }} pts</span>
+                            {% endif %}
+                        </div>
+                        <div class="text-secondary small ms-4">{{ f.description }}</div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="p-3 text-muted">No high-risk structural anomalies detected for this URL.</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Quantitative Features Table -->
+        <div class="col-lg-6">
+            <div class="cyber-card p-4 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="text-light fw-bold mb-0">
+                        <i class="bi bi-cpu text-cyber-accent me-2"></i>Quantitative Feature Vector
+                    </h5>
+                    <span class="badge bg-dark border border-secondary text-muted small">Input Values</span>
+                </div>
+
+                {% set feats = scan.feature_analysis %}
+                <div class="table-responsive">
+                    <table class="table-cyber small">
+                        <tbody>
+                            <tr>
+                                <td class="text-muted">Total URL Length</td>
+                                <td class="text-end fw-bold text-light">{{ feats.get('url_len', scan.submitted_url|length) }} chars</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">Domain / Host Length</td>
+                                <td class="text-end fw-bold text-light">{{ feats.get('domain_len', 'N/A') }} chars</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">Subdomain Depth</td>
+                                <td class="text-end fw-bold text-light">{{ feats.get('subdomain_count', 0) }} levels</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">Dot ('.') Count</td>
+                                <td class="text-end fw-bold text-light">{{ feats.get('dot_count', 0) }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">Hyphen ('-') Count</td>
+                                <td class="text-end fw-bold text-light">{{ feats.get('hyphen_count', 0) }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">IP Address Used as Host</td>
+                                <td class="text-end fw-bold {% if feats.get('is_ip') %}text-danger{% else %}text-light{% endif %}">
+                                    {{ 'YES (High Risk)' if feats.get('is_ip') else 'NO' }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">HTTPS Encryption Protocol</td>
+                                <td class="text-end fw-bold {% if feats.get('is_https') %}text-success{% else %}text-warning{% endif %}">
+                                    {{ 'HTTPS (Present)' if feats.get('is_https') else 'HTTP (Insecure)' }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">URL Shortener Service Detected</td>
+                                <td class="text-end fw-bold {% if feats.get('is_shortener') %}text-warning{% else %}text-light{% endif %}">
+                                    {{ 'YES (Masked)' if feats.get('is_shortener') else 'NO' }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recommendations Card -->
+    <div class="cyber-card p-4 mb-4">
+        <h5 class="text-light fw-bold mb-3">
+            <i class="bi bi-shield-check text-cyber-accent me-2"></i>Actionable Security Recommendations
+        </h5>
+        <ul class="list-unstyled mb-0 text-secondary small">
+            {% if scan.recommendations %}
+                {% for r in scan.recommendations %}
+                <li class="mb-2 d-flex align-items-start">
+                    <i class="bi bi-check-circle-fill text-cyber-accent me-2 mt-1"></i>
+                    <span>{{ r }}</span>
+                </li>
+                {% endfor %}
+            {% else %}
+                <li class="text-muted">Standard browsing safety rules apply.</li>
+            {% endif %}
+        </ul>
+    </div>
+
+    <!-- Defensive Project Disclosure -->
+    <div class="p-3 rounded border border-secondary border-opacity-25 text-muted small" style="background: rgba(15, 23, 42, 0.4);">
+        <i class="bi bi-info-circle me-1 text-cyber-accent"></i>
+        <strong>Defensive Transparency Disclosure:</strong> This threat analysis was produced entirely through local lexical string processing and pre-trained character-level TF-IDF Random Forest inference. In strict accordance with cybersecurity safety guidelines, the submitted website was never visited, crawled, or pinged over the network.
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Audit Scan History{% endblock %}
+
+{% block content %}
+<div class="container px-lg-5 py-4">
+    <!-- History Header -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+        <div>
+            <div class="d-flex align-items-center gap-2">
+                <h2 class="text-light fw-bold mb-0">Audit Scan History</h2>
+                <span id="historyCountBadge" class="badge bg-primary bg-opacity-25 text-info border border-info small">Loading...</span>
+            </div>
+            <p class="text-muted small mb-0">Persistent SQLite audit log of evaluated URL threats, classifications, and scores.</p>
+        </div>
+
+        <div class="d-flex flex-wrap gap-2">
+            <a href="{{ url_for('scanner.api_export_csv') }}" class="btn btn-cyber-secondary btn-sm d-flex align-items-center gap-1">
+                <i class="bi bi-file-earmark-spreadsheet"></i> Export CSV
+            </a>
+            <button id="clearHistoryBtn" type="button" class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1">
+                <i class="bi bi-trash"></i> Clear Audit Log
+            </button>
+            <a href="{{ url_for('scanner.scanner_page') }}" class="btn btn-cyber-primary btn-sm d-flex align-items-center gap-1">
+                <i class="bi bi-shield-plus"></i> New Scan
+            </a>
+        </div>
+    </div>
+
+    <!-- Filters & Search Toolbar -->
+    <div class="cyber-card p-3 mb-4">
+        <div class="row g-2 align-items-center">
+            <div class="col-md-5">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text bg-dark border-secondary text-secondary"><i class="bi bi-search"></i></span>
+                    <input type="text" id="historySearch" class="form-control bg-dark text-light border-secondary" placeholder="Search by URL, domain, or scan UUID...">
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text bg-dark border-secondary text-secondary"><i class="bi bi-funnel"></i></span>
+                    <select id="historyFilter" class="form-select bg-dark text-light border-secondary">
+                        <option value="">All Classifications</option>
+                        <option value="safe">Safe / Legitimate Only</option>
+                        <option value="suspicious">Suspicious Only</option>
+                        <option value="danger">High Risk / Phishing Only</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text bg-dark border-secondary text-secondary"><i class="bi bi-sort-down"></i></span>
+                    <select id="historySort" class="form-select bg-dark text-light border-secondary">
+                        <option value="date_desc">Latest Scans First</option>
+                        <option value="date_asc">Oldest Scans First</option>
+                        <option value="risk_desc">Highest Risk First</option>
+                        <option value="risk_asc">Lowest Risk First</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- History Table Container -->
+    <div class="cyber-card">
+        <div class="table-responsive">
+            <table class="table-cyber">
+                <thead>
+                    <tr>
+                        <th style="width: 100px;">UUID</th>
+                        <th>Target URL</th>
+                        <th style="width: 180px;">Domain</th>
+                        <th style="width: 150px;">Classification</th>
+                        <th style="width: 120px;">Risk Score</th>
+                        <th style="width: 160px;">Logged At</th>
+                        <th style="width: 130px;" class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="historyTableBody">
+                    <!-- Populated asynchronously via JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
